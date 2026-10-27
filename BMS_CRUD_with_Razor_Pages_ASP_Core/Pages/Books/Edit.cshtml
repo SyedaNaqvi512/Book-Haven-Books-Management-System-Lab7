@@ -1,0 +1,124 @@
+﻿@page
+@model BMS_CRUD_with_Razor_Pages_ASP_Core.Pages.Books.EditModel
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<div class="library-page">
+    <div class="library-header">
+        <div>
+            <p class="eyebrow">BOOK MANAGEMENT</p>
+            <h1>Edit Book</h1>
+            <p class="subtitle">Update the information for this book.</p>
+        </div>
+
+        <a asp-page="./Index" class="btn btn-modal-close">
+            Back to Collection
+        </a>
+    </div>
+
+    <div class="library-card edit-book-card">
+        <div class="library-card-header">
+            <div>
+                <h2>Book Information</h2>
+                <p>Editing book #@Model.Book.Id</p>
+            </div>
+        </div>
+
+        <div class="edit-book-content">
+            <form method="post">
+                <input type="hidden" asp-for="Book.Id" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.title" class="form-label">
+                        Book Title
+                    </label>
+                    <input asp-for="Book.title"
+                           class="form-control"
+                           placeholder="Enter book title" />
+                    <span asp-validation-for="Book.title"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.author" class="form-label">
+                        Author
+                    </label>
+                    <input asp-for="Book.author"
+                           class="form-control"
+                           placeholder="Enter author's name" />
+                    <span asp-validation-for="Book.author"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.description" class="form-label">
+                        Description
+                    </label>
+                    <textarea asp-for="Book.description"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Write a short description"></textarea>
+                    <span asp-validation-for="Book.description"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.publisher" class="form-label">
+                        Publisher
+                    </label>
+                    <input asp-for="Book.publisher"
+                           class="form-control"
+                           placeholder="Enter publisher name" />
+                    <span asp-validation-for="Book.publisher"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.status" class="form-label">
+                        Status
+                    </label>
+                    <select asp-for="Book.status" class="form-select">
+                        <option value="">Select status</option>
+                        <option value="Available">Available</option>
+                        <option value="Borrowed">Borrowed</option>
+                        <option value="Reserved">Reserved</option>
+                    </select>
+                    <span asp-validation-for="Book.status"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Book.category" class="form-label">
+                        Category
+                    </label>
+                    <select asp-for="Book.category" class="form-select">
+                        <option value="">Select category</option>
+                        <option value="Programming">Programming</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Education">Education</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Science">Science</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span asp-validation-for="Book.category"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="edit-form-actions">
+                    <button type="submit" class="btn btn-chocolate">
+                        Save Changes
+                    </button>
+
+                    <a asp-page="./Index" class="btn btn-modal-close">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@page "{id:int}"
+@model BMS_CRUD_with_Razor_Pages_ASP_Core.Pages.Books.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Book";
+}
+
+<section class="library-header">
+    <div>
+        <p class="eyebrow">MANAGE YOUR COLLECTION</p>
+        <h1>Delete Book</h1>
+        <p class="subtitle">
+            Review the book details before confirming deletion.
+        </p>
+    </div>
+</section>
+
+<div class="form-card">
+    <h2>Are you sure?</h2>
+
+    <p class="form-description">
+        You are about to permanently delete this book from your library.
+    </p>
+
+    <div class="delete-book-details">
+        <p><strong>Book ID:</strong> #@Model.Book.Id</p>
+        <p><strong>Title:</strong> @(Model.Book.title ?? "Untitled")</p>
+        <p><strong>Author:</strong> @(Model.Book.author ?? "Unknown author")</p>
+        <p><strong>Description:</strong> @(Model.Book.description ?? "—")</p>
+        <p><strong>Publisher:</strong> @(Model.Book.publisher ?? "—")</p>
+        <p><strong>Status:</strong> @(Model.Book.status ?? "Not specified")</p>
+        <p><strong>Category:</strong> @(Model.Book.category ?? "—")</p>
+    </div>
+
+    <form method="post">
+        <input type="hidden" name="id" value="@Model.Book.Id" />
+
+        <button type="submit" class="btn btn-delete-confirm">
+            Yes, Delete Book
+        </button>
+
+        <a asp-page="Index"
+           class="btn btn-outline-secondary ms-2">
+            Cancel
+        </a>
+    </form>
+</div>

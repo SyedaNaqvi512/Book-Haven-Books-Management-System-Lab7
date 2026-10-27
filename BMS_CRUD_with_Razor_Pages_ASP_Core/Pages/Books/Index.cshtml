@@ -1,0 +1,303 @@
+﻿@page
+@model BMS_CRUD_with_Razor_Pages_ASP_Core.Pages.Books.IndexModel
+
+@{
+    ViewData["Title"] = "Your Collection";
+}
+
+<div class="library-page">
+    <div class="library-header">
+        <div>
+            <div class="eyebrow">DASHBOARD</div>
+            <h1>Your Collection</h1>
+            <p class="subtitle">All books saved in your database</p>
+        </div>
+
+        <a asp-page="./Create" class="btn btn-chocolate">
+            + Add New Book
+        </a>
+    </div>
+
+    @if (Model.Books != null && Model.Books.Any())
+    {
+        <div class="library-card">
+            <div class="library-card-header">
+                <div>
+                    <h2>Saved Books</h2>
+                    <p>Manage and explore your library catalog</p>
+                </div>
+
+                <div class="book-count">
+                    <strong>@Model.Books.Count</strong>
+                    @(Model.Books.Count == 1 ? "book" : "books")
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="books-table">
+                    <thead>
+                        <tr>
+                            <th class="col-id">ID</th>
+                            <th class="col-book">Book</th>
+                            <th class="col-publisher">Publisher</th>
+                            <th class="col-status">Status</th>
+                            <th class="col-category">Category</th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var book in Model.Books)
+                        {
+                            <tr>
+                                <td class="book-id">
+                                    #@book.Id
+                                </td>
+
+                                <td>
+                                    <div class="book-info">
+                                        <strong class="book-title">
+                                            @(string.IsNullOrWhiteSpace(book.title)
+                                                ? "Untitled Book"
+                                                : book.title)
+                                        </strong>
+
+                                        <span class="book-author">
+                                            By @(string.IsNullOrWhiteSpace(book.author)
+                                                ? "Unknown Author"
+                                                : book.author)
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(book.publisher)
+                                        ? "—"
+                                        : book.publisher)
+                                </td>
+
+                                <td>
+                                    <span class="status-label">
+                                        @(string.IsNullOrWhiteSpace(book.status)
+                                            ? "Unknown"
+                                            : book.status)
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(book.category)
+                                        ? "Other"
+                                        : book.category)
+                                </td>
+
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button"
+                                                class="btn btn-view"
+                                                data-book-id="@book.Id"
+                                                data-title="@book.title"
+                                                data-author="@book.author"
+                                                data-description="@book.description"
+                                                data-publisher="@book.publisher"
+                                                data-status="@book.status"
+                                                data-category="@book.category"
+                                                onclick="openBookDetails(this)">
+                                            View
+                                        </button>
+
+                                        <a asp-page="./Edit"
+                                           asp-route-id="@book.Id"
+                                           class="btn btn-edit">
+                                            Edit
+                                        </a>
+
+                                        <a asp-page="./Delete"
+                                           asp-route-id="@book.Id"
+                                           class="btn btn-delete">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                Showing <strong>@Model.Books.Count</strong>
+                @(Model.Books.Count == 1 ? "book" : "books")
+                in your collection
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="library-card">
+            <div class="empty-state">
+                <div class="empty-icon">📚</div>
+                <h3>Your library is empty</h3>
+                <p>Get started by adding your first book to your collection.</p>
+
+                <a asp-page="./Create" class="btn btn-chocolate">
+                    Add First Book
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Book Details Popup -->
+<div id="bookDetailsModal"
+     class="book-modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modalBookTitle"
+     aria-hidden="true"
+     hidden>
+
+    <div class="book-modal-backdrop"
+         onclick="closeBookDetails()">
+    </div>
+
+    <div class="book-modal-dialog">
+        <div class="book-modal-header">
+            <div class="modal-book-icon">📖</div>
+
+            <div class="modal-heading">
+                <span class="eyebrow">BOOK DETAILS</span>
+                <h2 id="modalBookTitle">Book Title</h2>
+                <p id="modalBookAuthor" class="modal-author"></p>
+            </div>
+
+            <button type="button"
+                    class="modal-close"
+                    onclick="closeBookDetails()"
+                    aria-label="Close book details">
+                &times;
+            </button>
+        </div>
+
+        <div class="book-modal-body">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Book ID</span>
+                    <span id="modalBookId" class="detail-value"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Publisher</span>
+                    <span id="modalBookPublisher" class="detail-value"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Status</span>
+                    <span id="modalBookStatus" class="detail-value"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Category</span>
+                    <span id="modalBookCategory" class="detail-value"></span>
+                </div>
+            </div>
+
+            <div class="detail-description-section">
+                <h3>Description</h3>
+                <p id="modalBookDescription"
+                   class="detail-description"></p>
+            </div>
+        </div>
+
+        <div class="book-modal-footer">
+            <button type="button"
+                    class="btn btn-modal-close"
+                    onclick="closeBookDetails()">
+                Close
+            </button>
+
+            <a id="modalEditLink"
+               href="#"
+               class="btn btn-chocolate">
+                Edit Book
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const bookModal =
+            document.getElementById("bookDetailsModal");
+
+        let previouslyFocusedElement = null;
+
+        function openBookDetails(button) {
+            if (!button || !bookModal) {
+                return;
+            }
+
+            previouslyFocusedElement = button;
+
+            const bookId = button.dataset.bookId || "";
+            const title = button.dataset.title || "Untitled Book";
+            const author = button.dataset.author || "Unknown Author";
+            const description = button.dataset.description || "";
+            const publisher = button.dataset.publisher || "Not provided";
+            const status = button.dataset.status || "Unknown";
+            const category = button.dataset.category || "Other";
+
+            document.getElementById("modalBookId").textContent =
+                "#" + bookId;
+
+            document.getElementById("modalBookTitle").textContent =
+                title;
+
+            document.getElementById("modalBookAuthor").textContent =
+                "By " + author;
+
+            document.getElementById("modalBookPublisher").textContent =
+                publisher;
+
+            document.getElementById("modalBookStatus").textContent =
+                status;
+
+            document.getElementById("modalBookCategory").textContent =
+                category;
+
+            document.getElementById("modalBookDescription").textContent =
+                description.trim() ||
+                "No description has been provided for this book.";
+
+            // Open the Edit page for this specific book.
+            document.getElementById("modalEditLink").href =
+                "@Url.Page("/Books/Edit")" +
+                "?id=" + encodeURIComponent(bookId);
+
+            bookModal.hidden = false;
+            bookModal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-open");
+
+            bookModal.querySelector(".modal-close").focus();
+        }
+
+        function closeBookDetails() {
+            if (!bookModal || bookModal.hidden) {
+                return;
+            }
+
+            bookModal.hidden = true;
+            bookModal.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("modal-open");
+
+            if (previouslyFocusedElement) {
+                previouslyFocusedElement.focus();
+            }
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                closeBookDetails();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@page
+@model BMS_CRUD_with_Razor_Pages_ASP_Core.Pages.Books.CreateModel
+
+@{
+    ViewData["Title"] = "Add a Book";
+}
+
+<section class="library-header">
+    <div>
+        <p class="eyebrow">GROW YOUR COLLECTION</p>
+        <h1>Add a New Book</h1>
+        <p class="subtitle">
+            Enter the book details below to add it to your library.
+        </p>
+    </div>
+</section>
+
+<div class="form-card">
+    <h2>Book Information</h2>
+    <p class="form-description">
+        Fill in the details of the book you want to save.
+    </p>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="Book.title" class="form-label">Title</label>
+            <input asp-for="Book.title" class="form-control"
+                   placeholder="Enter book title" />
+            <span asp-validation-for="Book.title"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Book.author" class="form-label">Author</label>
+            <input asp-for="Book.author" class="form-control"
+                   placeholder="Enter author's name" />
+            <span asp-validation-for="Book.author"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Book.description"
+                   class="form-label">Description</label>
+            <textarea asp-for="Book.description"
+                      class="form-control" rows="3"
+                      placeholder="Write a short description"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Book.publisher"
+                   class="form-label">Publisher</label>
+            <input asp-for="Book.publisher" class="form-control"
+                   placeholder="Enter publisher name" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Book.status" class="form-label">Status</label>
+            <select asp-for="Book.status" class="form-select">
+                <option value="">Select status</option>
+                <option value="Available">Available</option>
+                <option value="Borrowed">Borrowed</option>
+                <option value="Reserved">Reserved</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Book.category"
+                   class="form-label">Category</label>
+            <select asp-for="Book.category" class="form-select">
+                <option value="">Select category</option>
+                <option value="Programming">Programming</option>
+                <option value="Technology">Technology</option>
+                <option value="Education">Education</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Science">Science</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-chocolate">
+            Save Book
+        </button>
+
+        <a asp-page="Index" class="btn btn-outline-secondary ms-2">
+            Cancel
+        </a>
+    </form>
+</div>
